@@ -59,6 +59,9 @@
         width: 100%;
         cursor: pointer;
     }
+    .button:hover {
+        background-color: #f81c6fba;
+    }
 
     .message-container {
         border: 1px solid #ccc;
@@ -113,37 +116,46 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+    // Wait for the DOM to be fully loaded before executing the code
     document.addEventListener('DOMContentLoaded', () => {
-        let socket = io();
-        let form = document.getElementById('form');
-        let name = document.getElementById('name');
-        let message = document.getElementById('message');
-        let messageArea = document.getElementById('messageArea');
+        // Create a Socket.IO instance and connect to the server
+        const socket = io();
 
+        // Get references to the relevant HTML elements
+        const form = document.getElementById('form');
+        const nameInput = document.getElementById('name');
+        const messageInput = document.getElementById('message');
+        const messageArea = document.getElementById('messageArea');
+
+        // Add an event listener to the form for message submission
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (name.value && message.value) {
-                socket.emit('send name', name.value);
-                socket.emit('send message', message.value);
-                message.value = '';
+            // Ensure both a name and a message are provided before emitting data
+            if (nameInput.value && messageInput.value) {
+                socket.emit('send name', nameInput.value);
+                socket.emit('send message', messageInput.value);
+                messageInput.value = ''; // Clear the message input
             }
         });
 
+        // Listen for incoming 'send name' events and display usernames
         socket.on('send name', (username) => {
-            let name = document.createElement('p');
-            name.classList.add('user-spacing');
-            name.innerHTML = `<span class="username">${username}:</span>`;
-            messageArea.appendChild(name);
+            const nameElement = document.createElement('p');
+            nameElement.classList.add('user-spacing');
+            nameElement.innerHTML = `<span class="username">${username}:</span>`;
+            messageArea.appendChild(nameElement);
         });
 
+        // Listen for incoming 'send message' events and display chat messages
         socket.on('send message', (chat) => {
-            let chatContent = document.createElement('p');
+            const chatContent = document.createElement('p');
             chatContent.classList.add('message');
             chatContent.textContent = chat;
             messageArea.appendChild(chatContent);
         });
     });
+
 </script>
 </body>
 </html>
