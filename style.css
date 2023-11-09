@@ -50,6 +50,11 @@ body {
     padding: 12px;
     width: 100%;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background-color: #f81c6fba;
 }
 
 .message-container {

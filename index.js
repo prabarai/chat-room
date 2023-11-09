@@ -23,17 +23,17 @@ const server = http.createServer((req, res) => {
         });
     }
 
-    // Import CSS on NodeJS without Express but some how this code is not working
-    const staticDir = path.join(__dirname, 'public');
-
-    if (req.url === '/public/style.css') {
-        const cssPath = path.join(staticDir, 'style.css');
+    // Import CSS on NodeJS without Express
+    if (req.url === '/style.css') {
+        const cssPath = path.join(__dirname, 'style.css');
         const cssStream = fs.createReadStream(cssPath);
 
         res.writeHead(200, { 'Content-Type': 'text/css' });
         cssStream.pipe(res);
     } else {
         console.log('Request not for style.css');
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        // res.end('Not Found');
     }
 
 });
